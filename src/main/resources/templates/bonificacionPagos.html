@@ -1,10 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link th:href="@{/css/bootstrap/bootstrap.css}" rel="stylesheet">
 </head>
 <body>
     <!--ALONSO ZAMBRANO -->
+    <div class="card">
+        <div class="card-header">
+            BONIFICACION DE PAGOS PUNTUALES
+        </div>
+        <div class="card-body">
+            <form th:action = "@{/calcularPagos}" method="post" th:object = "${pagosmodel}">
+                <div class="mb-3">
+                    <label for="txtmonto" class="form-label">Ingrese el monto de su compra:</label>
+                    <input type="number" th:field = "*{montoCompra}" class="form-control" id="txtmonto" placeholder="Ingrese monto">
+                </div>
+
+                <div class="mb-3">
+                    <label for="txtdiaspago" class="form-label">¿En cuantos dias cancelará?:</label>
+                    <input type="number" th:field = "*{diasPago}" class="form-control" id="txtdiaspago" placeholder="Dias de pago">
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary">CALCULAR</button>
+            </form>
+
+            <div th:if="${visualizaralerta}" class="alert" th:classappend = "${estilodiagnostico}" role="alert">
+                <span th:text="${resultado} ?: ''"></span>
+            </div>
+
+        </div>
+    </div>
 </body>
 </html>
