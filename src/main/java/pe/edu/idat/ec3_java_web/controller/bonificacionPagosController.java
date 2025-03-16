@@ -17,6 +17,7 @@ public class bonificacionPagosController {
     public String formularioBonificacionPagos(Model model){
         model.addAttribute("pagosmodel", new bonificacionPagosModel());
         model.addAttribute("visualizaralerta", false);
+        model.addAttribute("visualizaralerta2", false);
         return "bonificacionPagos";
     }
 
@@ -25,29 +26,41 @@ public class bonificacionPagosController {
         Double montoCo = pg.getMontoCompra();
         Integer diasPa = pg.getDiasPago();
         Double desctPa;
+        Double subtotal;
         Double total;
-        String diagnostico = "";
+        String diagnosticoSub = "";
+        String diagnosticoTot = "";
         String estiloDiagnostico = "alert-primary";
+        String estiloDiagnostico2 = "alert-primary";
 
         if (diasPa < 7){
             desctPa = 0.1;
-            total = montoCo * desctPa;
-            diagnostico = "El monto total a pagar es: " + total;
+            subtotal = montoCo * desctPa;
+            total = montoCo - subtotal;
+            diagnosticoSub = "Tienes un descuento del 10%: " + "S/."+ subtotal;
+            diagnosticoTot = "Y el monto total a pagar es: " + "S/."+ total;
 
         }else if (diasPa < 15){
             desctPa = 0.05;
-            total = montoCo * desctPa;
-            diagnostico = "El monto total a pagar es: " + total;
+            subtotal = montoCo * desctPa;
+            total = montoCo - subtotal;
+            diagnosticoSub = "Tienes un descuento del 5%: " + "S/."+ subtotal;
+            diagnosticoTot = "Y el monto total a pagar es: " + "S/."+ total;
 
-        } else {
+        } if (diasPa >= 15) {
             total = montoCo;
-            diagnostico = "El monto total a pagar es: " + total;
-
+            diagnosticoSub = "No tienes descuento y el monto total a pagar es: " + "S/."+ total;
+            diagnosticoTot = "";
+            model.addAttribute("visualizaralerta2", false);
+        } else {
+            model.addAttribute("visualizaralerta2", true);
         }
 
-        model.addAttribute("resultado", " " + diagnostico);
+        model.addAttribute("resultado", " " + diagnosticoSub);
+        model.addAttribute("resultado2", " " + diagnosticoTot);
         model.addAttribute("visualizaralerta", true);
         model.addAttribute("estilodiagnostico", estiloDiagnostico);
+        model.addAttribute("estilodiagnostico2", estiloDiagnostico2);
         return "bonificacionPagos";
 
     }
